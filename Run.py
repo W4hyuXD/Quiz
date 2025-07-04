@@ -175,12 +175,20 @@ def tampilkan_skor():
                 cetak(tree)
     input("\n[!] Tekan ENTER untuk kembali ke menu...")
 
-def putar_backsound(nama_file="musik.mp3"):
+def putar_backsound(folder="musik"):
     try:
-        os.popen(f"play-audio {nama_file}")
-        cetak(f"{P2}[bold][{H2}✓{P2}] Musik diputar di latar belakang.")
-    except:
-        cetak(f"[bold]{P2}[{M2}!{P2}] Gagal memutar musik.")
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        daftar = [f for f in os.listdir(folder) if f.endswith(".mp3")]
+        if not daftar:
+            cetak(f"[bold]{P2}[{M2}!{P2}] Tidak ada file mp3 di folder '{folder}/'.")
+            return
+        lagu = random.choice(daftar)
+        path = os.path.join(folder, lagu)
+        cetak(f"{P2}[bold][{H2}♫{P2}] Memutar lagu: [cyan]{lagu}[/cyan]")
+        os.popen(f"play-audio \"{path}\"")
+    except Exception as e:
+        cetak(f"[bold]{P2}[{M2}!{P2}] Gagal memutar musik. Error: {e}")
 
 def main_kuis():
     bersihkan_layar()
